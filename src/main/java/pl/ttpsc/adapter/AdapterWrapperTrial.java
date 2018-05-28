@@ -1,10 +1,16 @@
 package pl.ttpsc.adapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AdapterWrapperTrial
 {
     public static void main(String args[]) {
-
-        //TODO: implement
+        List<MediaPlayer> list = new ArrayList<>();
+        list.add(new Mp3Player());
+        list.add(new FormatAdapter(new Mp4Player()));
+        list.add(new FormatAdapter(new VlcPlayer()));
+        list.forEach((mediaPlayer -> mediaPlayer.play("hello")));
     }
 }
 
@@ -34,5 +40,15 @@ class VlcPlayer implements MediaPackage {
     }
 }
 
-class FormatAdapter {
+class FormatAdapter implements MediaPlayer {
+    private final MediaPackage mediaPackage;
+
+    public FormatAdapter(MediaPackage mediaPackage) {
+        this.mediaPackage = mediaPackage;
+    }
+
+    @Override
+    public void play(String filename) {
+        this.mediaPackage.playFile(filename);
+    }
 }
